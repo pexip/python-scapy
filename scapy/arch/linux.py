@@ -100,7 +100,10 @@ def get_working_if():
     for i in get_if_list():
         if i == LOOPBACK_NAME:                
             continue
-        ifflags = struct.unpack("16xH14x",get_if(i,SIOCGIFFLAGS))[0]
+        try:
+            ifflags = struct.unpack("16xH14x",get_if(i,SIOCGIFFLAGS))[0]
+        except IOError:
+            continue
         if ifflags & IFF_UP:
             return i
     return LOOPBACK_NAME
